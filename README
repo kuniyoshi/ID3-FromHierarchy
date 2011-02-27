@@ -1,4 +1,4 @@
-ID3-FromHierarchy version 0.02
+ID3-FromHierarchy version 0.03
 ==============================
 
 INSTALLATION
@@ -14,8 +14,9 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
+  - perl 5.10.0
   - Modern::Perl
-  - Mouse
+  - Readonly
   - Test::Data
 
 COPYRIGHT AND LICENCE

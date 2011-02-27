@@ -4,29 +4,23 @@ use 5.010000;
 use utf8;
 use Modern::Perl;
 use Carp qw( carp croak );
-
-use Mouse;
-
-has tag => (
-    is  => "rw",
-    isa => "HashRef",
-);
-
-no Mouse;
-
+use Readonly;
+use base "Class::Accessor";
 use File::Basename qw( basename );
 use File::Spec::Functions qw( splitdir );
 
-our $VERSION = '0.02';
+__PACKAGE__->mk_accessors( qw(
+    tag
+) );
+
+our $VERSION = '0.03';
 
 my @SUFFIXES = qw( .mp3 .MP3 );
 
-
 sub parse {
     my $self   = shift;
-    my $target = shift;
-    croak "Target required."
-        unless $target;
+    my $target = shift
+        or croak "Target required.";
 
     my @pathes = splitdir( $target );
     croak "Could not parse. Its depth is too shallow."
@@ -39,8 +33,6 @@ sub parse {
         track   => undef,
         artist  => $pathes[1],
         album   => $pathes[2],
-        comment => undef,
-        year    => undef,
         genre   => $pathes[0],
     );
 
@@ -104,8 +96,6 @@ According to this expection, parses ID3 tag, and returns tag.
 
 =item tag
 
-The tag has same key with autoinfo method of MP3::Tag.
-
 =back
 
 =head1 METHODS
@@ -120,8 +110,13 @@ Gets filename, and returns ID3 tag.
 
 =head1 SEE ALSO
 
-ID3::FromHierarchy
-ID3::FromHierarchy::GenreArtistTitle
+=over
+
+=item ID3::FromHierarchy
+
+=item ID3::FromHierarchy::GenreArtistTitle
+
+=back
 
 =head1 AUTHOR
 

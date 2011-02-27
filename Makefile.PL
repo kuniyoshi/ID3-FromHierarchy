@@ -7,9 +7,8 @@ WriteMakefile(
     VERSION_FROM      => 'lib/ID3/FromHierarchy.pm',
     PREREQ_PM         => {
         "Modern::Perl"   => 0,
-        "Mouse"          => 0,
+        Readonly         => 0,
         "Test::Data"     => 0,
-        "Test::Synopsis" => 0,
     },
     LICENSE           => 'perl',
     ABSTRACT_FROM     => 'lib/ID3/FromHierarchy.pm',

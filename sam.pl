@@ -1,22 +1,27 @@
 #!/usr/bin/perl
 
+use 5.10.0;
 use utf8;
 use open ":utf8";
 use open ":std";
 use Modern::Perl;
 use lib "lib";
 use ID3::FromHierarchy;
+use File::Spec::Functions qw( catfile );
 
-my $parser = ID3::FromHierarchy->new;
+my $parser = ID3::FromHierarchy->new(
+    root => [ $ENV{HOME}, "Musics" ],
+);
 
 my @files = (
-    "/home/prigel/musics/+musics/+KAORI/lasting.mp3",
+    catfile( qw( favorite angela Spirial ), "01 - Spirial.mp3" ),
 );
-__END__
+
 foreach my $file ( @files ) {
     my %tag = eval { $parser->parse( $file ) };
-    if ( $@ ) {
-        warn "Could not parse a file[$file]\n";
+
+    if ( my $e = $@ ) {
+        warn "!!! Could not parse a file[$file].[$e]\n";
         next;
     }
 
@@ -24,3 +29,4 @@ foreach my $file ( @files ) {
     say "Parsed.";
     print map { "$_: $tag{$_}\n" } keys %tag;
 }
+

@@ -1,5 +1,8 @@
 Revision history for Perl extension ID3::FromHierarchy.
 
+0.03  Wed Fri 16 00:42:00 2011
+    - Remove Mouse.
+    - Re-factoring.
 0.02  Thu Nov 29 16:54:40 2009
     - Also ok if music-file is named <track>-<title>.
 0.01  Wed Dec  2 17:17:52 2009

@@ -3,24 +3,22 @@ use Modern::Perl;
 use File::Spec::Functions qw( catfile );
 use ID3::FromHierarchy::GenreArtistTitle;
 
-use Test::More tests => 84;
+use Test::More tests => 14;
 use Test::Data qw( Hash );
 
-my @keys = qw( title track artist album comment year genre );
+my @keys = qw( genre artist album track title );
 
 my $p = ID3::FromHierarchy::GenreArtistTitle->new;
 
 my $file;
 my %tag;
 
-
 # One path pattern.
 $file = catfile(
     "favorite",
 );
 %tag = eval { $p->parse( $file ) };
-isnt( $@, "" );
-
+isnt( $@, q{} );
 
 # Two pathes pattern.
 $file = catfile(
@@ -28,14 +26,15 @@ $file = catfile(
     "GARNET CROW",
 );
 %tag = eval { $p->parse( $file ) };
-isnt( $@, "" );
-
+isnt( $@, q{} );
 
 # Three pathes pattern.
 my %wish = (
-    title  => "水のない晴れた海へ",
-    artist => "GARNET CROW",
     genre  => "favorite",
+    artist => "GARNET CROW",
+    album  => undef,
+    track  => undef,
+    title  => "水のない晴れた海へ",
 );
 
 $file = catfile(
@@ -44,9 +43,8 @@ $file = catfile(
     "水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is( $@, q{} );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -54,9 +52,8 @@ $file = catfile(
     "水のない晴れた海へ.MP3",
 );
 %tag = eval { $p->parse( $file ) };
-is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is( $@, q{} );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -64,9 +61,8 @@ $file = catfile(
     "01 水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish, track => "01" );
+is( $@, q{} );
+is_deeply( \%tag, { %wish, track => "01" } );
 
 $file = catfile(
     "favorite",
@@ -74,9 +70,8 @@ $file = catfile(
     "01-水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish, track => "01" );
+is( $@, q{} );
+is_deeply( \%tag, { %wish, track => "01" } );
 
 $file = catfile(
     "favorite",
@@ -84,10 +79,8 @@ $file = catfile(
     "01 - 水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish, track => "01" );
-
+is( $@, q{} );
+is_deeply( \%tag, { %wish, track => "01" } );
 
 # Four pathes pattern.
 $file = catfile(
@@ -97,8 +90,7 @@ $file = catfile(
     "01 - 水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-isnt( $@, "" );
-
+isnt( $@, q{} );
 
 # Five pathes pattern.
 $file = catfile(
@@ -109,29 +101,5 @@ $file = catfile(
     "01 - 水のない晴れた海へ.mp3",
 );
 %tag = eval { $p->parse( $file ) };
-isnt( $@, "" );
-
-
-sub check_values {
-    my $tag_ref = shift;
-    my %hash    = ( ( map { $_ => undef } @keys ), @_ );
-
-    foreach my $key ( @keys ) {
-        is( $tag_ref->{ $key }, $hash{ $key } );
-    }
-
-    return;
-}
-
-sub check_keys {
-    my $tag_ref = shift;
-
-    foreach my $key ( @keys ) {
-        exists_ok( $key, %{ $tag_ref } );
-    }
-
-    is( keys %{ $tag_ref }, @keys );
-
-    return;
-}
+isnt( $@, q{} );
 

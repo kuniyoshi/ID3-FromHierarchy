@@ -3,7 +3,7 @@ use Modern::Perl;
 use File::Spec::Functions qw( catfile );
 
 use Test::More;
-eval { use Test::Synopsis };
+eval "use Test::Synopsis";
 if ( $@ ) {
     plan skip_all => "Test::Synopsis required for testing";
 }

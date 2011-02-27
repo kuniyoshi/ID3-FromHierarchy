@@ -3,16 +3,15 @@ use Modern::Perl;
 use File::Spec::Functions qw( catfile );
 use ID3::FromHierarchy::GenreArtistAlbumTitle;
 
-use Test::More tests => 116;
+use Test::More tests => 18;
 use Test::Data qw( Hash );
 
-my @keys = qw( title track artist album comment year genre );
+my @keys = qw( genre artist album track title );
 
 my $p = ID3::FromHierarchy::GenreArtistAlbumTitle->new;
 
 my $file;
 my %tag;
-
 
 # One path pattern.
 $file = catfile(
@@ -20,7 +19,6 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 isnt( $@, "" );
-
 
 # Two pathes pattern.
 $file = catfile(
@@ -30,7 +28,6 @@ $file = catfile(
 %tag = eval { $p->parse( $file ) };
 isnt( $@, "" );
 
-
 # Three pathes pattern.
 $file = catfile(
     "favorite",
@@ -39,7 +36,6 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 isnt( $@, "" );
-
 
 # Four pathes pattern.
 my %wish = (
@@ -58,8 +54,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -69,8 +64,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -80,8 +74,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -91,8 +84,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish, track => undef );
+is_deeply( \%tag, { %wish, track => undef } );
 
 $file = catfile(
     "favorite",
@@ -102,8 +94,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -113,8 +104,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
+is_deeply( \%tag, \%wish );
 
 $file = catfile(
     "favorite",
@@ -124,9 +114,7 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 is( $@, "" );
-check_keys( \%tag );
-check_values( \%tag, %wish );
-
+is_deeply( \%tag, \%wish );
 
 # Five pathes pattern.
 $file = catfile(
@@ -138,28 +126,4 @@ $file = catfile(
 );
 %tag = eval { $p->parse( $file ) };
 isnt( $@, "" );
-
-
-sub check_values {
-    my $tag_ref = shift;
-    my %hash    = ( ( map { $_ => undef } @keys ), @_ );
-
-    foreach my $key ( @keys ) {
-        is( $tag_ref->{ $key }, $hash{ $key } );
-    }
-
-    return;
-}
-
-sub check_keys {
-    my $tag_ref = shift;
-
-    foreach my $key ( @keys ) {
-        exists_ok( $key, %{ $tag_ref } );
-    }
-
-    is( keys %{ $tag_ref }, @keys );
-
-    return;
-}
 

@@ -1,52 +1,31 @@
 package ID3::FromHierarchy;
 
-use 5.010000;
+use 5.10.0;
 use utf8;
 use Modern::Perl;
 use Carp qw( carp croak );
+use base "Class::Accessor";
 use File::Spec::Functions qw( splitdir catfile );
 use ID3::FromHierarchy::GenreArtistTitle;
 use ID3::FromHierarchy::GenreArtistAlbumTitle;
 
-use Mouse;
-
-has gat => (
-    is      => "rw",
-    isa     => "Object",
-    default => sub { ID3::FromHierarchy::GenreArtistTitle->new },
-);
-
-has gaat => (
-    is      => "rw",
-    isa     => "Object",
-    default => sub { ID3::FromHierarchy::GenreArtistAlbumTitle->new },
-);
-
-no Mouse;
-
-our $VERSION = '0.02';
-
+our $VERSION = '0.03';
 
 sub parse {
     my $self   = shift;
-    my $target = shift;
-    croak "Target required."
-        unless $target;
+    my $target = shift
+        or croak "Target required.";
 
     my @pathes = splitdir( $target );
-    croak "Could not parse. Its depth is too shallow."
-        unless @pathes > 2;
-    croak "Could not parse: Its depth is too deep."
-        unless @pathes < 5;
 
     my $parser;
 
     given ( scalar @pathes ) {
         when ( 3 ) {
-            $parser = $self->gat;
+            $parser = ID3::FromHierarchy::GenreArtistTitle->new;
         }
         when ( 4 ) {
-            $parser = $self->gaat;
+            $parser = ID3::FromHierarchy::GenreArtistAlbumTitle->new;
         }
         default {
             croak "The depth of target is not neither 3 nor 4.";
@@ -78,17 +57,13 @@ Parses ID3 tag from directory hierarchy, and returns ID3 tag.
 Parse patterns are exist in sub namespace of this.
 See ID3::FromHierarchy::**.
 
-=head1 ATTRIBUTES
-
-A instance has no attribute.
-
 =head1 METHODS
 
 =over
 
 =item parse( $filename )
 
-Parse ID3 tag from filename. Id can't, croak.
+Parse ID3 tag from filename. If can't, croak.
 The order of parse is:
 
   - <genre>/<artist>/<disc_class><disc_number> - <disc_name>/<track> - <title>.mp3
@@ -99,9 +74,15 @@ The order of parse is:
 
 =head1 SEE ALSO
 
-MP3::Tag
-ID3::FromHierarchy::GenreArtistTitle
-ID3::FromHierarchy::GenreArtistAlbumTitle
+=over
+
+=item MP3::Tag
+
+=item ID3::FromHierarchy::GenreArtistTitle
+
+=item ID3::FromHierarchy::GenreArtistAlbumTitle
+
+=back
 
 =head1 AUTHOR
 

@@ -3,8 +3,6 @@ use Modern::Perl;
 use Path::Class qw( dir );
 use File::Spec::Functions qw( catfile );
 use ID3::FromHierarchy;
-
-use Test::Data qw( Hash );
 use Test::More tests => 7;
 
 my $dir = dir( "sample_data" );

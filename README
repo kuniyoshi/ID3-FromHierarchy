@@ -17,7 +17,6 @@ This module requires these other modules and libraries:
   - perl 5.10.0
   - Modern::Perl
   - Readonly
-  - Test::Data
 
 COPYRIGHT AND LICENCE
 

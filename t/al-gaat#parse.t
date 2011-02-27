@@ -2,9 +2,7 @@ use utf8;
 use Modern::Perl;
 use File::Spec::Functions qw( catfile );
 use ID3::FromHierarchy::GenreArtistAlbumTitle;
-
 use Test::More tests => 18;
-use Test::Data qw( Hash );
 
 my @keys = qw( genre artist album track title );
 

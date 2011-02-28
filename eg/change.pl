@@ -26,16 +26,17 @@ MP3::Tag->config( write_v24 => 1 );
 
 my $root = dir( q{}, qw( Users kuniyoshikouji Music ) );
 
-my @target_genres = qw( game );
+#my @target_genres = qw( anime character favorite liking game );
+my @target_genres = qw( favorite );
 
 my $parser = ID3::FromHierarchy->new;
 
 foreach my $genre ( grep { $_->is_dir } $root->children ) {
     next unless true { $_ eq $genre ->relative( $root ) } @target_genres;
-    say "### ", $genre ->relative( $root );
+    say "### ", decode( "utf-8-mac", $genre ->relative( $root ) );
 
     foreach my $artist ( grep { $_->is_dir } $genre->children ) {
-        say "--- ", $artist->relative( $genre );
+        say "--- ", decode( "utf-8-mac", $artist->relative( $genre ) );
 
         foreach my $mp3 ( grep { ! $_->is_dir } $artist->children ) {
             say "--- --- ", decode( "utf-8-mac", $mp3->relative( $artist ) );
@@ -57,11 +58,11 @@ foreach my $genre ( grep { $_->is_dir } $root->children ) {
         foreach my $album ( grep { $_->is_dir } $artist->children ) {
             say "--- --- ", decode( "utf-8-mac", $album->relative( $artist ) );
 
-            foreach my $mp3 ( grep { $_->is_dir } $album->children ) {
+            foreach my $mp3 ( grep { ! $_->is_dir } $album->children ) {
                 say "--- --- --- ", decode( "utf-8-mac", $mp3->relative( $album ) );
 
                 my %tag = eval {
-                    $parser->parse( decode( "utf-8-mac", $mp3->relative( $album ) ) );
+                    $parser->parse( decode( "utf-8-mac", $mp3->relative( $root ) ) );
                 };
 
                 if ( my $e = $@ ) {

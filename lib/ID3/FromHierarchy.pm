@@ -1,5 +1,4 @@
 package ID3::FromHierarchy;
-
 use 5.10.0;
 use utf8;
 use Modern::Perl;
@@ -9,7 +8,7 @@ use File::Spec::Functions qw( splitdir catfile );
 use ID3::FromHierarchy::GenreArtistTitle;
 use ID3::FromHierarchy::GenreArtistAlbumTitle;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub parse {
     my $self   = shift;

@@ -1,5 +1,7 @@
 Revision history for Perl extension ID3::FromHierarchy.
 
+0.04  Sat Nov 12 16:54:24 2011
+    - Add PREREQ module.
 0.03  Wed Fri 16 00:42:00 2011
     - Remove Mouse.
     - Re-factoring.

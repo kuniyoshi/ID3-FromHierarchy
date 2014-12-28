@@ -1,5 +1,7 @@
 Revision history for Perl extension ID3::FromHierarchy.
 
+0.05  Sun Dec 28 13:29:05 JST 2014
+    - Change from OO style to function style
 0.04  Sat Nov 12 16:54:24 2011
     - Add PREREQ module.
 0.03  Wed Fri 16 00:42:00 2011

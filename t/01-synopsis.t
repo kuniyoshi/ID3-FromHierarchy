@@ -1,9 +1,11 @@
 use utf8;
-use Modern::Perl;
+use strict;
+use warnings;
 use File::Spec::Functions qw( catfile );
-
 use Test::More;
-eval { use Test::Synopsis };
+
+eval "use Test::Synopsis";
+
 if ( $@ ) {
     plan skip_all => "Test::Synopsis required for testing";
 }
@@ -11,7 +13,6 @@ else {
     plan tests => 1;
 }
 
-my $module = catfile( "lib", "ID3", "FromHierarchy", "GenreArtistAlbumTitle.pm" );
+my $module = catfile( "lib", "ID3", "FromHierarchy.pm" );
 
 synopsis_ok( $module );
-

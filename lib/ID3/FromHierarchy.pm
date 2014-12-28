@@ -7,7 +7,8 @@ use Carp qw( carp croak );
 use File::Basename qw( basename );
 use File::Spec::Functions qw( splitdir catfile );
 
-Readonly our $VERSION     => "0.05";
+our $VERSION = "0.05";
+
 Readonly my $IS_MP3_RE    => qr{ [.] mp3 }i;
 Readonly my $TRACK_PARSER => qr{\A (\d{1,3}) (?:[ ][-][ ] | [ ]) (.*) }msx;
 
